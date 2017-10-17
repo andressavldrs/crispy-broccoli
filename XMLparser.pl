@@ -2,16 +2,17 @@
 
 #########################################################################
 #                                                                       #
-#  This example shows how to use the twig_roots option                  #
-#  It outputs the name of the leader in a statistical category          #
+#  This program parse a XML file, extracting the ID, total length,      #
+#  3`UTR length and cds position.                                       #
+#  INPUT: XMLparser.pl file.xml output.txt 100                          #
+#  OUTPUT: output.txt (ID utr-length cds-position)                      #
 #                                                                       #
 #########################################################################
 
 use strict;
 use XML::Twig;
 
-my $xmlfile = $ARGV[0];
-my $output = $ARGV[1];
+my ($xmlfile, $output, $min_utr) = @ARGV;
 
   open(my $fh, ">", $output)
 or die "Can't open > $output: $!";
@@ -31,6 +32,9 @@ $t->parsefile( $xmlfile);
 
       my $utr3 = $length - $2; #$total_length - $cds_length
 
-      print $fh "$1 $utr3 $2\n";
+      if($utr3  >= $min_utr){
+        print $fh "$1 $utr3 $2\n";
+      }
+
       $t->purge;           # frees the memory
     }
