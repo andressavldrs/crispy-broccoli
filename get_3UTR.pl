@@ -4,20 +4,19 @@ use strict;
 if (@ARGV == 3 ) 
 {
 	my ($f_sequence, $f_ids, $f_output) = @ARGV;
-	my $utr_size = 0, my $x = 0, my $y =0;; 
+	my $utr_size = 0, my $x = 0, my $y = 0;; 
 
 
 	my %seq_ids; #hash: id => total_length
 	
-	open (my $in, '<', $f_sequence) or die "Can't open input file \"$f_sequence\": $!\n"; #sequence.fa file
-	open (my $id, '<', $f_ids) or die "Can't open input file \"$f_ids\": $!\n"; #file w ids and cds length 
-	open (my $out, '>', $f_output) or die "Can't open input file \"$f_output\": $!\n";  #sequences w only 3utr region
+	open (my $in, '<', $f_sequence)	or die "Can't open input file \"$f_sequence\": $!\n"; #sequence.fa file
+	open (my $id, '<', $f_ids)		or die "Can't open input file \"$f_ids\": $!\n"; #file w ids and cds length 
+	open (my $out, '>', $f_output)	or die "Can't open input file \"$f_output\": $!\n";  #sequences w only 3utr region
 	
 
 	while (my $line = <$id>)	
 	{
 #		Atribui os ids ao hash %ids_sequences{$id} = $cds_length	
-#		05_01141	K08723 - formato exemplo	
 		
 		if($line =~  m/(\S*) (\d*) (\d*)/) #KT276273 384 10265
 		{
@@ -28,15 +27,13 @@ if (@ARGV == 3 )
 
 	while (my $line = <$in>)	
 	{
-	
-		
 		if($line =~  m/>(\w*).*/ && $seq_ids{$1}) #>FJ882601 |Homo sapiens|USA|1999 && id exists 
 		{
 
 			print $out "$line";
 			$x = $seq_ids{$1}%70; #characters to jump
 			$y = int($seq_ids{$1}/70); #lines to jump
-			print "$y	$x\n";
+			#print "$y	$x\n";
 	
 		}
 		elsif($line =~  m/>(\w*).*/){
@@ -44,7 +41,6 @@ if (@ARGV == 3 )
 			$x = -2; 
 		}
 		elsif($y > 0){
-			print "y: $y\n";
 			$y--;
 				
 		}
@@ -70,5 +66,3 @@ else
 {
 	print "Error: Missing arguments!";
 }
-
-
