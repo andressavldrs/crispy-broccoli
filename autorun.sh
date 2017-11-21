@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SEQ=$1 #sequence fasta
-XML=$2      # xml with regions data
+FILE=$2      # xml with regions data
 OUT_ID=$3   #output id
 MIN=$4      #min nucleotides value
 
@@ -9,9 +9,14 @@ REG2=152 # Size of 3'UTR region 2
 REG3=126 # Size of 3'UTR region 3
 
 function utr5 {
-    # parse a XML file and returns a file with ID   UTR LENGTH  CDS POSITION OP
-    perl XMLparser.pl $XML ${OUT_ID}_ids.txt $MIN 5
-
+    if [[ $FILE = *.gb ]]; then
+    # parse a Genbank file and returns a file with ID   UTR LENGTH  CDS POSITION     
+        perl GBparser.pl $FILE ${OUT_ID}_ids.txt $MIN 5
+    # parse a XML file and returns a file with ID   UTR LENGTH  CDS POSITION
+    else 
+        perl XMLparser.pl $FILE ${OUT_ID}_ids.txt $MIN 5
+    fi
+        
     <${OUT_ID}_ids.txt  awk '{h[$2]++} END { for(k in h) print k, h[k] }' | sort -k2 -nr | 
     head -n 1 | while read VAR1 VAR2
     do
@@ -23,10 +28,13 @@ function utr5 {
 }
 
 function utr3 {
-    # echo $XML $OUT_ID $MIN 
-    # parse a XML file and returns a file with ID   UTR LENGTH  CDS POSITION OP
-    perl XMLparser.pl $XML ${OUT_ID}_ids.txt $MIN 3
-
+        if [[ $FILE = *.gb ]]; then
+    # parse a Genbank file and returns a file with ID   UTR LENGTH  CDS POSITION    
+        perl GBparser.pl $FILE ${OUT_ID}_ids.txt $MIN 3
+    # parse a XML file and returns a file with ID   UTR LENGTH  CDS POSITION
+    else  
+        perl XMLparser.pl $FILE ${OUT_ID}_ids.txt $MIN 3
+    fi
     # select the most frequent occurrence and returns files with sequences 
     <${OUT_ID}_ids.txt  awk '{h[$2]++} END { for(k in h) print k, h[k] }' | sort -k2 -nr | 
     head -n 1 | while read VAR1 VAR2
