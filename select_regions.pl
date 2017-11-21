@@ -46,7 +46,7 @@ if (@ARGV == 4 )
 		}
 
 	}
-print "$reg1\n";
+#print "$reg1\n";
 
 	
 close($in);

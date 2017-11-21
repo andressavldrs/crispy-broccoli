@@ -27,7 +27,7 @@ if (@ARGV == 3 )
 
 	while (my $line = <$in>)	
 	{
-		if($line =~  m/>(\w*).*/ && $seq_ids{$1}) #>FJ882601 |Homo sapiens|USA|1999 && id exists 
+		if($line =~  m/>(\S*).*/ && $seq_ids{$1}) #>FJ882601 |Homo sapiens|USA|1999 && id exists 
 		{
 
 			print $out "$line";
@@ -36,7 +36,7 @@ if (@ARGV == 3 )
 			#print "$y	$x\n";
 	
 		}
-		elsif($line =~  m/>(\w*).*/){
+		elsif($line =~  m/>(\S*).*/){
 			$y = -1;
 			$x = -2; 
 		}
