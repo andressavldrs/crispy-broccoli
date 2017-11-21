@@ -27,7 +27,7 @@ if (@ARGV == 3 )
 
 	while (my $line = <$in>)	
 	{
-		if($line =~  m/>(\w*).*/ && $seq_ids{$1}) #>FJ882601 |Homo sapiens|USA|1999 && id exists 
+		if($line =~  m/>(\S*).*/ && $seq_ids{$1}) #>FJ882601 |Homo sapiens|USA|1999 && id exists 
 		{
 
 			print $out "$line";
@@ -36,7 +36,7 @@ if (@ARGV == 3 )
 			#print "lines:$y	characters:$x\n";
 	
 		}
-		elsif($line =~  m/>(\w*).*/ || $x==-1){
+		elsif($line =~  m/>(\S*).*/ || $x==-1){
 			$y = -1;
 			$x = -2; 
 		}
@@ -46,10 +46,10 @@ if (@ARGV == 3 )
 				
 		}
 		elsif($x>=0 && $y==0){
-			$line =~ m/^[A-Z]{$x}(.*)/;
+			$line =~ m/^([A-Z]{$x}).*/;
 			$x = -1;
 			my $seq = $1;
-			print $out "$seq\n";
+			print $out "$seq\n\n";
 		}
 
 	}
